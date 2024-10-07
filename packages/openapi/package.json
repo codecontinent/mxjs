@@ -1,3 +1,9 @@
 {
-  "name": "@mx/openapi"
+  "name": "@mx/openapi",
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "release-it": "^17.7.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.4.2"
+  }
 }

@@ -1,3 +1,12 @@
 {
-  "name": "@playground/lab"
+  "name": "@mx-ply/lab",
+  "scripts": {
+    "dev": "tsx --watch src/main.ts",
+    "start": "tsx src/main.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "tsx": "^4.19.1",
+    "typescript": "^5.4.2"
+  }
 }
