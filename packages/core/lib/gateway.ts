@@ -18,8 +18,8 @@ export class Gateway {
     this.routes.set(`${method}:${path}`, handler);
   }
 
-  public getRoute(path: string) {
-    return this.routes.get(path);
+  public getRoute(method: string, path: string) {
+    return this.routes.get(`${method}:${path}`);
   }
 
   public getRoutes() {

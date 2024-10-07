@@ -3,7 +3,7 @@ import { Inquery, Reply } from "../lib";
 /* eslint-disable no-unused-vars */
 
 export interface Context {
-  inquary: Inquery;
+  inquery: Inquery;
   reply: Reply;
   guards?: any[];
 }

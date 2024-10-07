@@ -81,6 +81,9 @@ export enum HttpStatusCodes {
   NETWORK_AUTHENTICATION_REQUIRED = 511,
 }
 
+export type HttpStatusText = keyof typeof HttpStatusCodes;
+export type HttpStatusCode = keyof typeof HttpStatusTexts;
+
 export const HttpStatusTexts = {
   100: "Continue",
   101: "Switching Protocols",
@@ -212,212 +215,220 @@ export const httpStatusTexts: Record<HttpStatusCodes, string> = {
 };
 
 //// MIME types
-export type MIME_TYPES = keyof typeof MimeTypes;
+export type FILE_EXTENTIONS = keyof typeof MimeTypes;
 
 export const MimeTypes = {
-  "application/json": {
+  json: {
     source: "iana",
-    extensions: ["json"],
+    mimeType: "application/json",
     charset: "UTF-8",
   },
-  "application/xml": {
+  xml: {
     source: "iana",
-    extensions: ["xml"],
+    mimeType: "application/xml",
     charset: "UTF-8",
   },
-  "text/html": {
+  html: {
     source: "iana",
-    extensions: ["html", "htm"],
+    mimeType: "text/html",
     charset: "UTF-8",
   },
-  "text/css": {
+  htm: {
     source: "iana",
-    extensions: ["css"],
+    mimeType: "text/html",
     charset: "UTF-8",
   },
-  "text/javascript": {
+  css: {
     source: "iana",
-    extensions: ["js"],
+    mimeType: "text/css",
     charset: "UTF-8",
   },
-  "image/png": {
+  js: {
     source: "iana",
-    extensions: ["png"],
-    charset: null,
-  },
-  "image/jpeg": {
-    source: "iana",
-    extensions: ["jpeg", "jpg"],
-    charset: null,
-  },
-  "image/gif": {
-    source: "iana",
-    extensions: ["gif"],
-    charset: null,
-  },
-  "image/svg+xml": {
-    source: "iana",
-    extensions: ["svg"],
+    mimeType: "text/javascript",
     charset: "UTF-8",
   },
-  "application/octet-stream": {
+  png: {
     source: "iana",
-    extensions: ["bin", "exe", "dll"],
+    mimeType: "image/png",
     charset: null,
   },
-  "application/pdf": {
+  jpeg: {
     source: "iana",
-    extensions: ["pdf"],
+    mimeType: "image/jpeg",
     charset: null,
   },
-  "application/zip": {
+  jpg: {
     source: "iana",
-    extensions: ["zip"],
+    mimeType: "image/jpeg",
     charset: null,
   },
-  "application/x-tar": {
+  gif: {
     source: "iana",
-    extensions: ["tar"],
+    mimeType: "image/gif",
     charset: null,
   },
-  "application/x-gzip": {
+  svg: {
     source: "iana",
-    extensions: ["gz"],
-    charset: null,
-  },
-  "text/plain": {
-    source: "iana",
-    extensions: ["txt"],
+    mimeType: "image/svg+xml",
     charset: "UTF-8",
   },
-  "text/csv": {
+  bin: {
     source: "iana",
-    extensions: ["csv"],
+    mimeType: "application/octet-stream",
+    charset: null,
+  },
+  exe: {
+    source: "iana",
+    mimeType: "application/octet-stream",
+    charset: null,
+  },
+  dll: {
+    source: "iana",
+    mimeType: "application/octet-stream",
+    charset: null,
+  },
+  pdf: {
+    source: "iana",
+    mimeType: "application/pdf",
+    charset: null,
+  },
+  zip: {
+    source: "iana",
+    mimeType: "application/zip",
+    charset: null,
+  },
+  tar: {
+    source: "iana",
+    mimeType: "application/x-tar",
+    charset: null,
+  },
+  gz: {
+    source: "iana",
+    mimeType: "application/x-gzip",
+    charset: null,
+  },
+  txt: {
+    source: "iana",
+    mimeType: "text/plain",
     charset: "UTF-8",
   },
-  "text/markdown": {
+  csv: {
     source: "iana",
-    extensions: ["md"],
+    mimeType: "text/csv",
     charset: "UTF-8",
   },
-  "application/vnd.ms-excel": {
+  md: {
     source: "iana",
-    extensions: ["xls"],
-    charset: null,
-  },
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-    source: "iana",
-    extensions: ["xlsx"],
-    charset: null,
-  },
-  "application/vnd.ms-powerpoint": {
-    source: "iana",
-    extensions: ["ppt"],
-    charset: null,
-  },
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation": {
-    source: "iana",
-    extensions: ["pptx"],
-    charset: null,
-  },
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-    source: "iana",
-    extensions: ["docx"],
-    charset: null,
-  },
-  "application/vnd.api+json": {
-    source: "iana",
-    extensions: ["jsonapi"],
+    mimeType: "text/markdown",
     charset: "UTF-8",
   },
-  "application/x-www-form-urlencoded": {
+  xls: {
     source: "iana",
-    extensions: [],
+    mimeType: "application/vnd.ms-excel",
     charset: null,
   },
-  "application/vnd.google-apps.document": {
+  xlsx: {
     source: "iana",
-    extensions: ["gdoc"],
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     charset: null,
   },
-  "application/vnd.google-apps.spreadsheet": {
+  ppt: {
     source: "iana",
-    extensions: ["gsheet"],
+    mimeType: "application/vnd.ms-powerpoint",
     charset: null,
   },
-  "application/vnd.google-apps.presentation": {
+  pptx: {
     source: "iana",
-    extensions: ["gslides"],
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     charset: null,
   },
-  "application/vnd.oasis.opendocument.text": {
+  docx: {
     source: "iana",
-    extensions: ["odt"],
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     charset: null,
   },
-  "application/vnd.oasis.opendocument.spreadsheet": {
+  jsonapi: {
     source: "iana",
-    extensions: ["ods"],
-    charset: null,
-  },
-  "application/vnd.oasis.opendocument.presentation": {
-    source: "iana",
-    extensions: ["odp"],
-    charset: null,
-  },
-  "application/x-shockwave-flash": {
-    source: "iana",
-    extensions: ["swf"],
-    charset: null,
-  },
-  "application/json-patch+json": {
-    source: "iana",
-    extensions: [],
+    mimeType: "application/vnd.api+json",
     charset: "UTF-8",
   },
-  "text/vcard": {
+  gdoc: {
     source: "iana",
-    extensions: ["vcf"],
+    mimeType: "application/vnd.google-apps.document",
     charset: null,
   },
-  "application/ld+json": {
+  gsheet: {
     source: "iana",
-    extensions: [],
+    mimeType: "application/vnd.google-apps.spreadsheet",
+    charset: null,
+  },
+  gslides: {
+    source: "iana",
+    mimeType: "application/vnd.google-apps.presentation",
+    charset: null,
+  },
+  odt: {
+    source: "iana",
+    mimeType: "application/vnd.oasis.opendocument.text",
+    charset: null,
+  },
+  ods: {
+    source: "iana",
+    mimeType: "application/vnd.oasis.opendocument.spreadsheet",
+    charset: null,
+  },
+  odp: {
+    source: "iana",
+    mimeType: "application/vnd.oasis.opendocument.presentation",
+    charset: null,
+  },
+  swf: {
+    source: "iana",
+    mimeType: "application/x-shockwave-flash",
+    charset: null,
+  },
+  vcf: {
+    source: "iana",
+    mimeType: "text/vcard",
+    charset: null,
+  },
+  ttf: {
+    source: "iana",
+    mimeType: "application/x-font-ttf",
+    charset: null,
+  },
+  otf: {
+    source: "iana",
+    mimeType: "application/x-font-opentype",
+    charset: null,
+  },
+  woff: {
+    source: "iana",
+    mimeType: "application/x-font-woff",
+    charset: null,
+  },
+  woff2: {
+    source: "iana",
+    mimeType: "application/x-font-woff2",
+    charset: null,
+  },
+  eot: {
+    source: "iana",
+    mimeType: "application/vnd.ms-fontobject",
+    charset: null,
+  },
+  ics: {
+    source: "iana",
+    mimeType: "text/calendar",
     charset: "UTF-8",
   },
-  "application/x-font-ttf": {
+  "7z": {
     source: "iana",
-    extensions: ["ttf"],
-    charset: null,
-  },
-  "application/x-font-opentype": {
-    source: "iana",
-    extensions: ["otf"],
-    charset: null,
-  },
-  "application/x-font-woff": {
-    source: "iana",
-    extensions: ["woff"],
-    charset: null,
-  },
-  "application/x-font-woff2": {
-    source: "iana",
-    extensions: ["woff2"],
-    charset: null,
-  },
-  "application/vnd.ms-fontobject": {
-    source: "iana",
-    extensions: ["eot"],
-    charset: null,
-  },
-  "text/calendar": {
-    source: "iana",
-    extensions: ["ics"],
-    charset: "UTF-8",
-  },
-  "application/x-7z-compressed": {
-    source: "iana",
-    extensions: ["7z"],
+    mimeType: "application/x-7z-compressed",
     charset: null,
   },
   //... Add more MIME types as needed
