@@ -10,6 +10,24 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+# IDE
+.idea
+.vscode/*
+!.vscode/settings.json
+
+# OS and Others
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*.tmp
+*.sublime-project
+*.sublime-workspace
+.vscode-test
+.husky/*
+!.husky/pre-commit
+!.husky/commit-msg
+
 # Runtime data
 pids
 *.pid

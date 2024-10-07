@@ -2,14 +2,22 @@
   "name": "mx",
   "version": "0.1.0",
   "description": "MX.js",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
   "scripts": {
     "test": "echo 'test'"
   },
+  "workspaces": [
+    "packages/*",
+    "playgrounds/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codecontinent/mxjs.git"
   },
+  "contributors": [
+    "Mahabub <mahabubx7@gmail.com>"
+  ],
   "keywords": [
     "mx",
     "mx.js",
@@ -17,10 +25,28 @@
     "typescript",
     "openapi"
   ],
-  "author": "Mahabub <mahabubx7@gmail.com>",
+  "author": "Mahabub <mahabubx7@gmail.com>, @mxjs",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/codecontinent/mxjs/issues"
   },
-  "homepage": "https://github.com/codecontinent/mxjs#readme"
+  "homepage": "https://github.com/codecontinent/mxjs#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@eslint/js": "^9.12.0",
+    "@types/node": "^22.7.4",
+    "eslint": "^9.12.0",
+    "globals": "^15.10.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "typescript": "^5.4.2",
+    "typescript-eslint": "^8.8.0"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }

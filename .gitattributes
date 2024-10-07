@@ -1,0 +1,7 @@
+# Automatically normalize line endings
+* text=auto
+
+# Treat package-manager's lock file as a binary file
+package-lock.json binary
+yarn.lock binary
+pnpm-lock.yaml binary
