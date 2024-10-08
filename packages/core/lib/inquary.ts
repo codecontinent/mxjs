@@ -1,11 +1,19 @@
 import { IncomingMessage } from "node:http";
+import { HttpMethods } from "./constants";
 
 export class Inquery {
   private request: IncomingMessage;
   private _body: any;
+  private _params: any;
+  private _query: any;
 
   constructor(req: IncomingMessage) {
     this.request = req;
+    this.query = {};
+    this.params = {};
+    this.body = null;
+
+    // this.parseQuery();
   }
 
   public get headers() {
@@ -13,7 +21,7 @@ export class Inquery {
   }
 
   public get method() {
-    return this.request.method;
+    return this.request.method as HttpMethods;
   }
 
   public get url() {
@@ -22,20 +30,6 @@ export class Inquery {
 
   public get body() {
     return this._body;
-  }
-
-  public set body(data: any) {
-    this._body = data;
-  }
-
-  public get query() {
-    const url = new URL(this.request.url!, this.request.headers.host);
-    return Object.fromEntries(url.searchParams);
-  }
-
-  public get params() {
-    const url = new URL(this.request.url!, this.request.headers.host);
-    return Object.fromEntries(url.searchParams);
   }
 
   public get ip() {
@@ -60,5 +54,25 @@ export class Inquery {
 
   public get protocol() {
     return (this.request.connection as any).encrypted ? "https" : "http";
+  }
+
+  public get params() {
+    return this._params;
+  }
+
+  public get query() {
+    return this._query;
+  }
+
+  public set body(data: any) {
+    this._body = data;
+  }
+
+  public set params(data: Record<string, any>) {
+    this._params = data;
+  }
+
+  public set query(data: Record<string, any>) {
+    this._query = data;
   }
 }

@@ -1,64 +1,144 @@
-import type { ContextHandler } from "../types";
-import { HttpMethods } from "./constants";
+import { IncomingMessage, ServerResponse } from "node:http";
+import { parseQueryFromUrlText } from "../helpers";
+import { ContextHandler } from "../types";
+import { Inquery } from "./inquary";
+import { Reply } from "./reply";
+import { RouteNode } from "./route";
 
 export class Gateway {
-  private routes: Map<string, ContextHandler>;
+  root: RouteNode;
 
   constructor() {
-    this.routes = new Map();
+    this.root = new RouteNode("/"); // Initialize the root node
   }
 
-  public register(path: string, method: HttpMethods, handler: ContextHandler) {
-    if (this.routes.has(path)) {
-      // overwrite the existing route, instead of throwing an error
-      console.warn(`Route ${path} already exists, overwriting...`);
-      this.routes.set(`${method}:${path}`, handler);
+  /// REGISTER a route <RouteNode> with a handler
+  register(path: string, method: string, handler: ContextHandler) {
+    const segments = path.split("/").filter(Boolean); // Split by '/', ignore empty segments
+    let currentNode = this.root;
+
+    for (const segment of segments) {
+      if (segment === "*") {
+        // Handle wildcard routes
+        currentNode = currentNode.addWildcardChild();
+        break; // Wildcard matches everything after this point
+      }
+      currentNode = currentNode.addChild(segment);
+    }
+    currentNode.addMethod(method, handler); // Add method to the final segment
+  }
+
+  // Add a module (sub-router) under a base path
+  module(base: string, moduleRouter: Gateway) {
+    const segments = base.split("/").filter(Boolean); // Split and filter base path
+    let currentNode = this.root;
+
+    for (const segment of segments) {
+      currentNode = currentNode.addChild(segment); // Navigate to the base path
     }
 
-    this.routes.set(`${method}:${path}`, handler);
+    // Recursively add all routes from moduleRouter under the base path
+    const addRoutesFromModule = (node: RouteNode, currentPath: string) => {
+      node.methods.forEach((handler, method) => {
+        this.register(currentPath, method, handler); // Register each method for the given path
+      });
+
+      node.children.forEach((childNode, segment) => {
+        const nextPath = `${currentPath}/${segment}`.replace(/\/+/g, "/"); // Avoid double slashes
+        addRoutesFromModule(childNode, nextPath); // Recursively register child routes
+      });
+
+      if (node.wildcardChild) {
+        const nextPath = `${currentPath}/*`;
+        addRoutesFromModule(node.wildcardChild, nextPath); // Handle wildcard route
+      }
+    };
+
+    addRoutesFromModule(moduleRouter.root, base);
   }
 
-  public getRoute(method: string, path: string) {
-    return this.routes.get(`${method}:${path}`);
+  // Traverse the route tree to find a matching route
+  findRoute(path: string, method: string): ContextHandler | null {
+    const segments = path.split("/").filter(Boolean);
+    let currentNode = this.root;
+
+    for (const segment of segments) {
+      if (currentNode.children.has(segment)) {
+        currentNode = currentNode.children.get(segment)!;
+      } else if (currentNode.children.has(":id")) {
+        currentNode = currentNode.children.get(":id")!; // Handle dynamic segments
+      } else if (currentNode.wildcardChild) {
+        currentNode = currentNode.wildcardChild; // Handle wildcard
+        break; // Stop checking after wildcard match
+      } else {
+        return null; // No match found
+      }
+    }
+
+    return currentNode.methods.get(method) || null; // Return method handler
   }
 
-  public getRoutes() {
-    return this.routes;
-  }
+  /// ================================================
+  // Handle incoming requests
+  handleRequests() {
+    return (req: IncomingMessage, res: ServerResponse) => {
+      // Find the matching route handler
+      const pathname = (req.url as string).split("?")[0] || "/";
+      const queryTxt = (req.url as string).split("?")[1] || "";
+      const query = parseQueryFromUrlText(queryTxt);
+      const params = {};
+      const method = (req.method as string) || "GET";
 
-  public get(path: string, handler: ContextHandler) {
+      const inquery = new Inquery(req);
+      const reply = new Reply(res);
+
+      const handler = this.findRoute(pathname, method);
+
+      if (handler) {
+        handler({ inquery, reply, params, query });
+        return;
+      }
+
+      // Not found 404
+      return reply.status(404).send("Route not found!");
+    };
+  }
+  /// ================================================
+
+  /// HTTP specific methods
+  get(path: string, handler: ContextHandler) {
     this.register(path, "GET", handler);
   }
 
-  public post(path: string, handler: ContextHandler) {
+  post(path: string, handler: ContextHandler) {
     this.register(path, "POST", handler);
   }
 
-  public put(path: string, handler: ContextHandler) {
+  put(path: string, handler: ContextHandler) {
     this.register(path, "PUT", handler);
   }
 
-  public delete(path: string, handler: ContextHandler) {
+  delete(path: string, handler: ContextHandler) {
     this.register(path, "DELETE", handler);
   }
 
-  public patch(path: string, handler: ContextHandler) {
+  patch(path: string, handler: ContextHandler) {
     this.register(path, "PATCH", handler);
   }
 
-  public options(path: string, handler: ContextHandler) {
-    this.register(path, "OPTIONS", handler);
-  }
-
-  public head(path: string, handler: ContextHandler) {
+  head(path: string, handler: ContextHandler) {
     this.register(path, "HEAD", handler);
   }
 
-  public trace(path: string, handler: ContextHandler) {
+  options(path: string, handler: ContextHandler) {
+    this.register(path, "OPTIONS", handler);
+  }
+
+  trace(path: string, handler: ContextHandler) {
     this.register(path, "TRACE", handler);
   }
 
-  public connect(path: string, handler: ContextHandler) {
+  connect(path: string, handler: ContextHandler) {
     this.register(path, "CONNECT", handler);
   }
 }

@@ -1,76 +1,98 @@
-import { createServer, IncomingMessage, ServerResponse } from "node:http";
+import { createServer, Server } from "node:http";
 import { ContextHandler } from "../types";
 import { Gateway } from "./gateway";
-import { Inquery } from "./inquary";
-import { Reply } from "./reply";
 
-export class Mx {
+/*
+|===============================================================================
+| MxJs
+| (c) 2024, Mahabub
+| @version 0.1.0 (alpha)
+| -----------------------------------------------------------------------------
+| The main class that acts as the entry point for the application.
+| It is responsible for handling incoming requests and routing them to the
+| appropriate handlers.
+|===============================================================================
+*/
+export class MxJs {
   private gateway: Gateway;
+  private httpServer: Server | null;
 
   constructor() {
     this.gateway = new Gateway();
+    this.httpServer = null;
   }
 
-  /// mapping incoming request to the registered route and handler
+  public bootstrap() {
+    this.httpServer = createServer(this.gateway.handleRequests());
+    return this;
+  }
 
-  private async route(req: IncomingMessage, res: ServerResponse) {
-    const inquery = new Inquery(req);
-    const reply = new Reply(res);
-    const handler = this.gateway.getRoute(inquery.method!, inquery.url!);
-
-    if (!handler) {
-      reply.status(404).send("Not Found");
-      return;
+  /// HANDLE incoming REQUESTs
+  public execute(
+    port?: number,
+    hostOrCallback?: string | (() => void | Promise<void>),
+    callback?: () => void | Promise<void>,
+  ): void {
+    if (!this.httpServer) {
+      throw new Error("Server is not ready yet!");
     }
 
-    handler({ inquery, reply });
+    if (typeof hostOrCallback === "string") {
+      if (callback) {
+        this.httpServer.listen(port, hostOrCallback, callback);
+        return;
+      }
+      this.httpServer.listen(port, hostOrCallback);
+      return;
+    } else if (hostOrCallback) this.httpServer.listen(port, hostOrCallback);
+    else if (port) this.httpServer.listen(port, "127.0.0.1");
+    else this.httpServer.listen(3080, "127.0.0.1");
   }
+  /// -------------------------
 
-  /// listen to incoming requests
-  public listen(
-    port: number,
-    hostname: string = "0.0.0.0",
-    callback?: () => void | Promise<void>,
-  ) {
-    // console.log("listening on", port, hostname);
-    const server = createServer(this.route.bind(this));
-    server.listen(port, hostname, callback);
-  }
-
-  /// register a route
-  public get(path: string, handler: ContextHandler) {
+  // Short access to HTTP Methods
+  public get(path: string, handler: ContextHandler): void {
     this.gateway.get(path, handler);
   }
 
-  public post(path: string, handler: ContextHandler) {
+  public post(path: string, handler: ContextHandler): void {
     this.gateway.post(path, handler);
   }
 
-  public put(path: string, handler: ContextHandler) {
+  public put(path: string, handler: ContextHandler): void {
     this.gateway.put(path, handler);
   }
 
-  public delete(path: string, handler: ContextHandler) {
+  public delete(path: string, handler: ContextHandler): void {
     this.gateway.delete(path, handler);
   }
 
-  public patch(path: string, handler: ContextHandler) {
+  public patch(path: string, handler: ContextHandler): void {
     this.gateway.patch(path, handler);
   }
 
-  public options(path: string, handler: ContextHandler) {
-    this.gateway.options(path, handler);
-  }
-
-  public head(path: string, handler: ContextHandler) {
+  public head(path: string, handler: ContextHandler): void {
     this.gateway.head(path, handler);
   }
 
-  public trace(path: string, handler: ContextHandler) {
+  public options(path: string, handler: ContextHandler): void {
+    this.gateway.options(path, handler);
+  }
+
+  public trace(path: string, handler: ContextHandler): void {
     this.gateway.trace(path, handler);
   }
 
-  public connect(path: string, handler: ContextHandler) {
+  public connect(path: string, handler: ContextHandler): void {
     this.gateway.connect(path, handler);
+  }
+
+  public module(basePath: string, sub: Gateway | MxJs): void {
+    if (sub instanceof MxJs) {
+      this.gateway.module(basePath, sub.gateway);
+      return;
+    }
+
+    this.gateway.module(basePath, sub);
   }
 }

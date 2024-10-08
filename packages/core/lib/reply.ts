@@ -12,8 +12,6 @@ export class Reply {
 
   constructor(res: ServerResponse) {
     this.response = res;
-    this.baseHeaders["X-HTTP-Version"] =
-      this.response.req?.httpVersion || "1.1";
     for (const key in this.baseHeaders) {
       this.response.setHeader(key, this.baseHeaders[key]);
     }
@@ -35,7 +33,7 @@ export class Reply {
   }
 
   // send response with JSON data
-  json(data: any) {
+  json(data: unknown) {
     this.response.setHeader("Content-Type", getMimeType("json"));
     this.send(JSON.stringify(data));
   }
@@ -47,7 +45,7 @@ export class Reply {
   }
 
   // send response normally
-  send(data: any) {
+  send(data: unknown) {
     this.response.end(data);
   }
 

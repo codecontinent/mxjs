@@ -1,11 +1,14 @@
 import { Inquery, Reply } from "../lib";
 
-/* eslint-disable no-unused-vars */
-
 export interface Context {
-  inquery: Inquery;
-  reply: Reply;
-  guards?: any[];
+  inquery: Inquery; // Incoming request
+  reply: Reply; // Outgoing response
+
+  params: Record<string, any>;
+  query: Record<string, any>;
+
+  pass?: () => void | Promise<void>;
+  guards?: Guards[]; // Acts as middleware[]
 }
 
 export interface Guards {
