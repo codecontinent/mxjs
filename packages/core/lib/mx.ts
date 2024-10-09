@@ -1,3 +1,10 @@
+/**
+ * @module @mx/core
+ * (c) 2024, Mahabub
+ * @version 0.1.0 (alpha)
+ * @class MxJs - The main class that acts as the entry point for the application.
+ */
+
 import { createServer, Server } from "node:http";
 import { ContextHandler } from "../types";
 import { Gateway } from "./gateway";
@@ -23,7 +30,7 @@ export class MxJs {
   }
 
   public bootstrap() {
-    this.httpServer = createServer(this.gateway.handleRequests());
+    this.httpServer = createServer(this.gateway.handle());
     return this;
   }
 

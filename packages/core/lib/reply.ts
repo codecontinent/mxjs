@@ -1,6 +1,13 @@
+/**
+ * @module @mx/core
+ * (c) 2024, Mahabub
+ * @version 0.1.0 (alpha)
+ * @class Reply
+ */
+
 import { ServerResponse } from "node:http";
+import { HttpStatusCode, httpStatusTexts } from "../constants";
 import { getMimeType } from "../helpers";
-import { HttpStatusCode, httpStatusTexts } from "./constants";
 
 export class Reply {
   private response: ServerResponse;

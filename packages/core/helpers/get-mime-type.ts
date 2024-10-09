@@ -1,4 +1,10 @@
-import { FILE_EXTENTIONS, MimeTypes } from "../lib/constants";
+/**
+ * @module @mx/core
+ * (c) 2024, Mahabub
+ * @version 0.1.0 (alpha)
+ */
+
+import { FILE_EXTENTIONS, MimeTypes } from "../constants";
 
 /**
  * Get mime type from file name or extension
