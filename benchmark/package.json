@@ -1,0 +1,41 @@
+{
+  "name": "benchmark",
+  "version": "1.0.0",
+  "description": "Benchmark tool",
+  "scripts": {
+    "test": "run-s \"test:express\" \"test:mxjs\"",
+    "benchmark:autocannon": "node src/benchmark",
+    "autocannon": "run-s test:express test:mxjs",
+    "k6": "run-s k6:express k6:mxjs",
+    "wrk": "run-s wrk:express wrk:mxjs",
+    "k6:express": "k6 run src/k6/k6-express.mjs --out json=src/k6/express.k6.json",
+    "k6:mxjs": "k6 run src/k6/k6-mxjs.mjs --out json=src/k6/mxjs.k6.json",
+    "wrk:express": "wrk -t8 -c400 -d10s http://127.0.0.1:3991 > wrk-express.txt",
+    "wrk:mxjs": "wrk -t8 -c400 -d10s http://127.0.0.1:3992 > wrk-mxjs.txt",
+    "start:express": "node src/express",
+    "start:mxjs": "tsx src/mxjs.ts",
+    "start": "run-p \"start:express\" \"start:mxjs\"",
+    "test:express": "autocannon -d 60 -c 10000 http://127.0.0.1:3991 && echo '\n\tExpress.js benchmark done\n\n'",
+    "test:mxjs": "autocannon -d 60 -c 10000 http://127.0.0.1:3992 && echo '\n\tMx.js benchmark done\n\n'"
+  },
+  "keywords": [
+    "benchmark",
+    "mxjs",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.5",
+    "autocannon": "^7.15.0",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "k6": "^0.0.0"
+  }
+}

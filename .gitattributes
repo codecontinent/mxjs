@@ -1,6 +1,9 @@
 # Automatically normalize line endings
 * text=auto
 
+# Custom
+**/k6/*.k6.json binary
+
 # Treat package-manager's lock file as a binary file
 package-lock.json binary
 yarn.lock binary
