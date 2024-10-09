@@ -5,11 +5,13 @@ import { Trend } from "k6/metrics";
 // Define a custom metric to track response times
 const responseTimeTrend = new Trend("response_time");
 
-export const options = {
+export let options = {
   stages: [
-    { duration: "10s", target: 1000 }, // Ramp up to 1000 users over 10 seconds
-    { duration: "30s", target: 1000 }, // Stay at 1000 users for 30 seconds
-    { duration: "10s", target: 0 }, // Ramp down to 0 users
+    { duration: "15s", target: 10000 }, // ramp up to 10k users
+    { duration: "30s", target: 10000 }, // stay at 10k users for half-minute
+    { duration: "10s", target: 5000 }, // ramp down to 5k users
+    { duration: "30s", target: 5000 }, // stay at 5k users for half-minute
+    { duration: "5s", target: 0 }, // ramp down to 0 users
   ],
 };
 
