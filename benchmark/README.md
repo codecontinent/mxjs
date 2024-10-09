@@ -1,42 +1,61 @@
-Running 10s test @ http://localhost:3991
-100 connections
+# Benchmarking results
 
-┌─────────┬──────┬──────┬───────┬───────┬─────────┬──────────┬────────┐
-│ Stat │ 2.5% │ 50% │ 97.5% │ 99% │ Avg │ Stdev │ Max │
-├─────────┼──────┼──────┼───────┼───────┼─────────┼──────────┼────────┤
-│ Latency │ 3 ms │ 4 ms │ 11 ms │ 15 ms │ 5.33 ms │ 13.51 ms │ 930 ms │
-└─────────┴──────┴──────┴───────┴───────┴─────────┴──────────┴────────┘
-┌───────────┬─────────┬─────────┬─────────┬─────────┬────────┬──────────┬─────────┐
-│ Stat │ 1% │ 2.5% │ 50% │ 97.5% │ Avg │ Stdev │ Min │
-├───────────┼─────────┼─────────┼─────────┼─────────┼────────┼──────────┼─────────┤
-│ Req/Sec │ 6,091 │ 6,091 │ 17,583 │ 21,999 │ 17,073 │ 4,233.18 │ 6,088 │
-├───────────┼─────────┼─────────┼─────────┼─────────┼────────┼──────────┼─────────┤
-│ Bytes/Sec │ 1.53 MB │ 1.53 MB │ 4.43 MB │ 5.55 MB │ 4.3 MB │ 1.07 MB │ 1.53 MB │
-└───────────┴─────────┴─────────┴─────────┴─────────┴────────┴──────────┴─────────┘
+This benchmarks were generate through some popular tools and using the same test input for each of the candidates.
 
-Req/Bytes counts sampled once per second.
+### Autocannon
 
-# of samples: 10
+**Express.js**
 
-171k requests in 10.03s, 43 MB read
-Running 10s test @ http://localhost:3992
-100 connections
+![express-ss](./src/autocannon/express.jpg)
 
-┌─────────┬──────┬──────┬───────┬──────┬─────────┬─────────┬────────┐
-│ Stat │ 2.5% │ 50% │ 97.5% │ 99% │ Avg │ Stdev │ Max │
-├─────────┼──────┼──────┼───────┼──────┼─────────┼─────────┼────────┤
-│ Latency │ 0 ms │ 0 ms │ 1 ms │ 2 ms │ 0.35 ms │ 1.21 ms │ 182 ms │
-└─────────┴──────┴──────┴───────┴──────┴─────────┴─────────┴────────┘
-┌───────────┬─────────┬─────────┬─────────┬─────────┬──────────┬──────────┬─────────┐
-│ Stat │ 1% │ 2.5% │ 50% │ 97.5% │ Avg │ Stdev │ Min │
-├───────────┼─────────┼─────────┼─────────┼─────────┼──────────┼──────────┼─────────┤
-│ Req/Sec │ 74,239 │ 74,239 │ 96,511 │ 99,071 │ 94,393.6 │ 7,086.35 │ 74,200 │
-├───────────┼─────────┼─────────┼─────────┼─────────┼──────────┼──────────┼─────────┤
-│ Bytes/Sec │ 16.2 MB │ 16.2 MB │ 21.1 MB │ 21.6 MB │ 20.6 MB │ 1.55 MB │ 16.2 MB │
-└───────────┴─────────┴─────────┴─────────┴─────────┴──────────┴──────────┴─────────┘
+**MxJs**
 
-Req/Bytes counts sampled once per second.
+![mxjs-ss](./src/autocannon/mxjs.jpg)
 
-# of samples: 10
+### K6
 
-944k requests in 10.02s, 206 MB read
+**Express.js**
+
+![express-k6](./src/k6/express.jpg)
+
+**MxJs**
+
+![mxjs-k6](./src/k6/mxjs.jpg)
+
+### WRK
+
+**Express.js**
+
+[wrk-express.txt](./wrk-express.txt)
+
+```txt
+Running 1m test @ http://127.0.0.1:3991
+  8 threads and 2500 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    76.14ms   22.01ms   1.95s    82.97%
+    Req/Sec     2.35k   811.17     6.88k    79.17%
+  1122338 requests in 1.00m, 269.73MB read
+  Socket errors: connect 0, read 540, write 0, timeout 779
+Requests/sec:  18690.71
+Transfer/sec:      4.49MB
+```
+
+**MxJs**
+
+[wrk-mxjs.txt](./wrk-mxjs.txt)
+
+```txt
+Running 1m test @ http://127.0.0.1:3992
+  8 threads and 2500 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    28.10ms   36.31ms   1.99s    99.65%
+    Req/Sec     9.34k     2.30k   23.67k    76.36%
+  4455066 requests in 1.00m, 0.90GB read
+  Socket errors: connect 0, read 105, write 0, timeout 1791
+Requests/sec:  74143.90
+Transfer/sec:     15.41MB
+
+```
+
+Thanks,
+~/@mahabubx7

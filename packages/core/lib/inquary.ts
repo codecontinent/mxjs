@@ -1,5 +1,12 @@
+/**
+ * @module @mx/core
+ * (c) 2024, Mahabub
+ * @version 0.1.0 (alpha)
+ * @class Inquery
+ */
+
 import { IncomingMessage } from "node:http";
-import { HttpMethods } from "./constants";
+import { HttpMethods } from "../constants";
 
 export class Inquery {
   private request: IncomingMessage;

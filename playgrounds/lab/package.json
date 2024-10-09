@@ -4,7 +4,8 @@
     "dev": "tsx --watch src/main.ts",
     "start": "tsx src/main.ts",
     "test": "tsx src/test.ts",
-    "test2": "tsx src/test2.ts"
+    "test2": "tsx src/test2.ts",
+    "router": "tsx src/router.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
