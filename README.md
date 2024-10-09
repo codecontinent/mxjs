@@ -1,7 +1,18 @@
-# mxjs
+# Mx.js
 
-Mx.js - Lightweight Node.js type-safe backend based framework
+**Mx.js** - Lightweight Node.js type-safe backend based framework
 
+
+<br />
+<br />
+<br />
+
+
+
+
+
+
+__These are just like a clip board for now__
 ### common build & other tools
 
 - release-it
@@ -45,12 +56,7 @@ Mx.js - Lightweight Node.js type-safe backend based framework
       "./index.ts",
       "./src/types.ts",
       "./src/helpers.ts",
-      "./src/plugins/vite.ts",
-      "./services/inertia.ts",
-      "./src/inertia_middleware.ts",
-      "./providers/inertia_provider.ts",
-      "./src/plugins/edge/plugin.ts",
-      "./src/plugins/japa/api_client.ts"
+      //.... more
     ],
     "outDir": "./build",
     "clean": true,
